@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SPIRF Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #fff; }
+    canvas { margin: 20px auto; display: block; }
+  </style>
+</head>
+<body>
+  <h2>SPIRF Report Charts</h2>
+  <canvas id="barChart" width="400" height="200"></canvas>
+  <canvas id="donutChart" width="400" height="200"></canvas>
+  <canvas id="radarChart" width="400" height="200"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Horizontal Bar Chart
+    new Chart(document.getElementById('barChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Skills Acquisition', 'Career Impact', 'Learning Quality', 'Flexibility', 'Future-Readiness'],
+        datasets: [{
+          data: [7, 8, 6, 5, 7],
+          backgroundColor: '#003049'
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { display: false, grid: { display: false } },
+          y: { ticks: { color: '#000' }, grid: { display: false } }
+        }
+      }
+    });
+
+    // Donut Chart
+    new Chart(document.getElementById('donutChart'), {
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          data: [56.4, 100 - 56.4],
+          backgroundColor: ['#003049', '#ddd'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutout: '80%',
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false },
+          title: {
+            display: true,
+            text: '56.4 SPIRF Score',
+            position: 'center',
+            color: '#000',
+            font: { size: 20 }
+          }
+        }
+      }
+    });
+
+    // Radar Chart
+    new Chart(document.getElementById('radarChart'), {
+      type: 'radar',
+      data: {
+        labels: ['Skills Acquisition', 'Industry Relevance', 'Career Impact', 'Financial ROI', 'Learning Experience', 'Portability', 'Time Efficiency', 'Assessment Rigor', 'Future-Readiness'],
+        datasets: [{
+          label: 'SPIRF Weighted Score',
+          data: [12, 11, 10, 8, 6, 5, 4, 5, 10],
+          backgroundColor: 'rgba(0, 48, 73, 0.2)',
+          borderColor: '#003049',
+          pointBackgroundColor: '#003049'
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: true }
+        },
+        scales: {
+          r: {
+            angleLines: { display: true },
+            suggestedMin: 0,
+            suggestedMax: 15
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
