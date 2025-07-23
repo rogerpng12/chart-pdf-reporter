@@ -1,2 +1,1 @@
-# chart-pdf-reporter
-Generate reports with Chart.js &amp; Puppeteer for n8n automation
+# chart-pdf-reporter\nGenerate reports with Chart.js & Puppeteer for n8n automation
