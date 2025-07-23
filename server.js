@@ -1,4 +1,3 @@
-
 const express = require('express');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
@@ -10,7 +9,7 @@ app.use(express.static('charts'));
 app.get('/generate-pdf', async (req, res) => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto(`http://localhost:${port}/charts/report.html`, { waitUntil: 'networkidle0' });
+  await page.goto(`file://${__dirname}/charts/report.html`, { waitUntil: 'networkidle0' });
   const pdf = await page.pdf({ format: 'A4' });
   await browser.close();
 
