@@ -1,36 +1,47 @@
-const express = require('express');
-const puppeteer = require('puppeteer');
-const fs = require('fs');
+const express = require("express");
+const puppeteer = require("puppeteer");
+
 const app = express();
-const port = process.env.PORT || 3000;
+app.use(express.json());
+app.use(express.static("public"));
 
-app.use(express.static('charts'));
+app.post("/generate", async (req, res) => {
+  const { html } = req.body;
 
-app.get('/generate-pdf', async (req, res) => {
+  if (!html) {
+    return res.status(400).send("Missing HTML content.");
+  }
+
   try {
     const browser = await puppeteer.launch({
-      executablePath: '/usr/bin/chromium-browser', // Use system-installed Chromium on Render
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: true
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      executablePath:
+        process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
     });
 
     const page = await browser.newPage();
-    await page.goto(`http://localhost:${port}/charts/report.html`, {
-      waitUntil: 'networkidle0'
-    });
+    await page.setContent(html, { waitUntil: "networkidle0" });
 
-    const pdf = await page.pdf({ format: 'A4' });
+    const pdf = await page.pdf({
+      format: "A4",
+      printBackground: true,
+    });
 
     await browser.close();
 
-    res.contentType("application/pdf");
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachment; filename=chart.pdf",
+    });
+
     res.send(pdf);
   } catch (error) {
-    console.error('PDF generation failed:', error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error generating PDF:", error);
+    res.status(500).send("Error generating PDF");
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
